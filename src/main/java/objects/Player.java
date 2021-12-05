@@ -1,0 +1,41 @@
+package objects;
+
+public class Player
+{
+    private String name;
+    private int hitPoints;
+    private int score;
+
+    public Player(String name, int hitPoints, int score)
+    {
+        this.name = name;
+        this.hitPoints = hitPoints;
+        this.score = score;
+    }
+
+    public String getName()
+    {
+        return name;
+    }
+
+    public int getHitPoints()
+    {
+        return hitPoints;
+    }
+
+    public void decreaseHitPoints(int points)
+    {
+        hitPoints -= points;
+    }
+
+    public int getScore()
+    {
+        return score;
+    }
+
+    public void increaseScore(int points)
+    {
+        score += points;
+    }
+
+}
