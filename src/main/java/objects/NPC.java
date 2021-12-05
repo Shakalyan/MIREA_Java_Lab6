@@ -12,4 +12,9 @@ public class NPC
         this.mystery = mystery;
     }
 
+    public String getName()
+    {
+        return name;
+    }
+
 }

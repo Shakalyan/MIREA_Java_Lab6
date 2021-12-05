@@ -43,7 +43,8 @@ public class Mystery
         for(int i = 0; i < variantsCount; ++i)
             output += i + ". " + variants.get(i) + "\n";
 
-        return output + correctVariant;
+        return output;
+
     }
 
 }
