@@ -1,5 +1,7 @@
 package objects;
 
+import java.util.ArrayList;
+
 public class Mystery
 {
 
@@ -7,11 +9,11 @@ public class Mystery
 
     private int complexity;
 
-    private String[] variants;
+    private ArrayList<String> variants;
     private int correctVariant;
     private static final int variantsCount = 4;
 
-    public Mystery(int complexity, String text, String[] variants, int correctVariant)
+    public Mystery(int complexity, String text, ArrayList<String> variants, int correctVariant)
     {
         this.text = text;
         this.complexity = complexity;
@@ -39,9 +41,9 @@ public class Mystery
     {
         String output = text + "\nVariants:\n";
         for(int i = 0; i < variantsCount; ++i)
-            output += i + ". " + variants[i] + "\n";
+            output += i + ". " + variants.get(i) + "\n";
 
-        return output;
+        return output + correctVariant;
     }
 
 }
