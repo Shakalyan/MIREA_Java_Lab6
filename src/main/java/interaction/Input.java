@@ -10,11 +10,4 @@ public class Input
     {
         return scanner.nextLine();
     }
-
-    public static int getIntInput()
-    {
-        return Integer.parseInt(scanner.nextLine());
-    }
-
-
 }

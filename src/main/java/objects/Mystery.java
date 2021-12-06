@@ -1,8 +1,9 @@
 package objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
-public class Mystery
+public class Mystery implements Serializable
 {
 
     private String text;

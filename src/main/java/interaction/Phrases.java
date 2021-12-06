@@ -6,6 +6,10 @@ import objects.Player;
 
 public class Phrases
 {
+    private static final String ANSI_RESET = "\u001B[0m";
+    private static final String ANSI_RED = "\u001B[31m";
+    private static final String ANSI_GREEN = "\u001B[32m";
+    private static final String ANSI_YELLOW = "\u001B[33m";
 
     public static String getEmptyPhrase()
     {
@@ -14,7 +18,47 @@ public class Phrases
 
     public static String getWelcomePhrase()
     {
-        return "Welcome to the LAB-6!";
+        return ANSI_GREEN + "Welcome to the LAB-6!" + ANSI_RESET;
+    }
+
+    public static String getTellingFacePhrase(String face)
+    {
+        return ANSI_YELLOW + "<" + face + ">" + ANSI_RESET;
+    }
+
+    public static String getLoadSuggestPhrase()
+    {
+        return "Do you want to load previous game?[Y/N]: ";
+    }
+
+    public static String getLoadSuccessfulPhrase()
+    {
+        return ANSI_GREEN + "Loaded successfully!" + ANSI_RESET;
+    }
+
+    public static String getLoadFaultPhrase()
+    {
+        return ANSI_RED + "Bad load" + ANSI_RESET;
+    }
+
+    public static String getSaveSuggestPhrase()
+    {
+        return "Do you want to save this game?[Y/N]: ";
+    }
+
+    public static String getSaveSuccessfulPhrase()
+    {
+        return ANSI_GREEN + "Saved successfully!" + ANSI_RESET;
+    }
+
+    public static String getSaveFaultPhrase()
+    {
+        return ANSI_RED + "Bad save" + ANSI_RESET;
+    }
+
+    public static String getAskVariantPhrase()
+    {
+        return "Print a number from 0 to 3 or 'exit' if you want to exit: ";
     }
 
     public static String getPutNamePhrase()
@@ -93,17 +137,17 @@ public class Phrases
 
     public static String getScoresIncreasePhrase(int addedScores, int currentScores)
     {
-        return "\n<Your scores are increased by " + addedScores + ". Now it's " + currentScores + ">\n";
+        return ANSI_GREEN + "\n<Your scores are increased by " + addedScores + ". Now it's " + currentScores + ">\n" + ANSI_RESET;
     }
 
     public static String getHPDecreasePhrase(int removedPoints, int currentPoints)
     {
-        return "\n<Your hit points are decreased by " + removedPoints + ". Now it's " + currentPoints + ">\n";
+        return ANSI_RED + "\n<Your hit points are decreased by " + removedPoints + ". Now it's " + currentPoints + ">\n" + ANSI_RESET;
     }
 
     public static String getEndGameStatsPhrase(int score)
     {
-        return "Game's finished! Your score: " + score + ".";
+        return ANSI_GREEN + "Game's finished! Your score: " + score + "." + ANSI_RESET;
     }
 
 }

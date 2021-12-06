@@ -1,9 +1,10 @@
 package objects;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 
-public class NPC
+public class NPC implements Serializable
 {
 
     private String name;
