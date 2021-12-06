@@ -37,4 +37,9 @@ public class NPC
         return name;
     }
 
+    public Mystery getMystery()
+    {
+        return mystery;
+    }
+
 }

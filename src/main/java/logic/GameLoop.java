@@ -21,26 +21,72 @@ public class GameLoop
     private static ArrayList<Mystery> mysteries;
     private static ArrayList<NPC> NPCs;
 
-    private static final int levelsCount = 10;
+    private static final int levelsCount = 5;
     private static final int complexitiesCount = 5;
 
+    private static final int baseAddedScore = 10;
+    private static final int baseRemovedHP = 10;
 
-    public static void main(String[] args)
+    private static final int phrasesDelay = 1000;
+
+
+    public static void main(String[] args) throws InterruptedException
     {
         locations = LocationsReader.getLocations();
-        ArrayList<Mystery> allMysteries = MysteriesReader.getMysteries();
-        mysteries = getMysteriesSet(allMysteries);
+        mysteries = MysteriesReader.getMysteries(levelsCount, complexitiesCount);
+        NPCs = generateNPCs(mysteries);
 
         View.printlnPhrase(Phrases.getWelcomePhrase());
-
         View.printPhrase(Phrases.getPutNamePhrase());
         player = new Player(Input.getInput(), 100, 0);
-
         View.printlnPhrase(Phrases.getHelloPhrase(player.getName()));
 
+        Random random = new Random();
+        for(int i = 0; i < levelsCount; ++i)
+        {
+            Location currentLocation = locations.get(random.nextInt(locations.size()));
+            NPC currentNPC = NPCs.get(i);
+            Mystery currentMystery = currentNPC.getMystery();
 
-        for(var l : mysteries)
-            System.out.println(l);
+            View.printlnPhrase(Phrases.getLocationChangingPhrase(currentLocation));
+            View.printlnPhrase(Phrases.getMeetNPCPhrase());
+            View.printlnPhrase(Phrases.getNPCStartPhrase(player.getName(), currentNPC));
+            View.printlnPhrase(Phrases.getAnswerPhrase());
+
+            int answer = Input.getIntInput();
+            if(currentMystery.answerIsCorrect(answer))
+            {
+                View.printlnPhrase(Phrases.getNPCCorrectAnswerPhrase());
+                int addedScores = baseAddedScore * currentMystery.getComplexity();
+                player.increaseScore(addedScores);
+                if(i + 1 != levelsCount)
+                {
+                    View.printlnPhrase(Phrases.getSTCorrectAnswerPhrase());
+                    View.printlnPhrase(Phrases.getScoresIncreasePhrase(addedScores, player.getScore()));
+                }
+                else
+                {
+                    View.printlnPhrase(Phrases.getWinPhrase());
+                }
+            }
+            else
+            {
+                int removedHP = baseRemovedHP * currentMystery.getComplexity();
+                player.decreaseHitPoints(removedHP);
+                if(player.getHitPoints() <= 0)
+                {
+                    View.printlnPhrase(Phrases.getLosePhrase());
+                    break;
+                }
+                else
+                {
+                    View.printlnPhrase(Phrases.getSTWrongAnswerPhrase());
+                    View.printlnPhrase(Phrases.getHPDecreasePhrase(removedHP, player.getHitPoints()));
+                }
+            }
+        }
+
+        View.printlnPhrase(Phrases.getEndGameStatsPhrase(player.getScore()));
 
     }
 
@@ -50,56 +96,14 @@ public class GameLoop
         return player;
     }
 
-    private static ArrayList<Mystery> getMysteriesSet(ArrayList<Mystery> allMysteries)
+    private static ArrayList<NPC> generateNPCs(ArrayList<Mystery> mysteries)
     {
-        allMysteries.sort((m1, m2) -> m1.getComplexity() - m2.getComplexity());
-        int allMysteriesCount = allMysteries.size();
-        if(allMysteriesCount <= levelsCount)
-            return allMysteries;
-
-        int[] bounds = new int[complexitiesCount];
-        int currentComplexity = 1;
-        for(int i = 0; i < allMysteriesCount-1; ++i)
+        ArrayList<NPC> npcs = new ArrayList<>();
+        for(int i = 0; i < mysteries.size(); ++i)
         {
-            if(currentComplexity != allMysteries.get(i).getComplexity())
-            {
-                bounds[currentComplexity - 1] = i;
-                ++currentComplexity;
-            }
+            npcs.add(new NPC(mysteries.get(i)));
         }
-        bounds[currentComplexity - 1] = allMysteriesCount;
-
-
-        int averageMysteriesCount = levelsCount / complexitiesCount;
-        Random random = new Random();
-        ArrayList<Mystery> mysteriesSet = new ArrayList<>();
-        for(int i = complexitiesCount - 1; i >= 0; --i)
-        {
-            int lowerBound = (i - 1 < 0)? 0 : bounds[i - 1];
-            for(int j = 0; j < averageMysteriesCount; ++j)
-            {
-                if(bounds[i] - lowerBound <= 0)
-                    break;
-                int index = random.nextInt(lowerBound, bounds[i]);
-                --bounds[i];
-                mysteriesSet.add(allMysteries.get(index));
-                allMysteries.set(index, null);
-                Collections.swap(allMysteries, index, bounds[i]);
-            }
-        }
-
-        if(mysteriesSet.size() != levelsCount)
-        {
-            int bound = levelsCount - mysteriesSet.size();
-            for(int i = 0; i < bound; ++i)
-            {
-                if(allMysteries.get(i) != null)
-                    mysteriesSet.add(allMysteries.get(i));
-            }
-        }
-
-        mysteriesSet.sort((m1, m2) -> m1.getComplexity() - m2.getComplexity());
-        return mysteriesSet;
+        return npcs;
     }
 
 }

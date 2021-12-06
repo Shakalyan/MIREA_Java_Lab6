@@ -25,7 +25,7 @@ public class Player
 
     public void decreaseHitPoints(int points)
     {
-        hitPoints -= points;
+        hitPoints = (hitPoints - points < 0) ? 0 : hitPoints - points;
     }
 
     public int getScore()

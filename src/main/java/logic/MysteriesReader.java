@@ -15,9 +15,9 @@ public class MysteriesReader
     private static File mysteriesFile = new File("Mysteries.txt");
 
 
-    public static ArrayList<Mystery> getMysteries()
+    public static ArrayList<Mystery> getMysteries(int levelsCount, int complexitiesCount)
     {
-        ArrayList<Mystery> mysteries = new ArrayList<>();
+        ArrayList<Mystery> allMysteries = new ArrayList<>();
 
         try(FileReader reader = new FileReader(mysteriesFile); BufferedReader bufferedReader = new BufferedReader(reader))
         {
@@ -37,7 +37,7 @@ public class MysteriesReader
 
                 int complexity = Integer.parseInt(bufferedReader.readLine());
 
-                mysteries.add(new Mystery(complexity, text, variants, correctVariantNumber));
+                allMysteries.add(new Mystery(complexity, text, variants, correctVariantNumber));
 
                 bufferedReader.readLine();
             }
@@ -45,10 +45,10 @@ public class MysteriesReader
         catch(IOException e)
         {
             System.out.println(e.getMessage());
-            mysteries = null;
+            allMysteries = null;
         }
 
-        return mysteries;
+        return distributeMysteries(allMysteries, levelsCount, complexitiesCount);
     }
 
     private static ArrayList<String> getRandomizedVariants(ArrayList<String> variants)
@@ -73,6 +73,58 @@ public class MysteriesReader
             if(variants.get(i).equals(correctVariant))
                 return i;
         return 0;
+    }
+
+    private static ArrayList<Mystery> distributeMysteries(ArrayList<Mystery> allMysteries, int levelsCount, int complexitiesCount)
+    {
+        allMysteries.sort((m1, m2) -> m1.getComplexity() - m2.getComplexity());
+        int allMysteriesCount = allMysteries.size();
+        if(allMysteriesCount <= levelsCount)
+            return allMysteries;
+
+        int[] bounds = new int[complexitiesCount];
+        int currentComplexity = 1;
+        for(int i = 0; i < allMysteriesCount-1; ++i)
+        {
+            if(currentComplexity != allMysteries.get(i).getComplexity())
+            {
+                bounds[currentComplexity - 1] = i;
+                ++currentComplexity;
+            }
+        }
+        bounds[currentComplexity - 1] = allMysteriesCount;
+
+
+        int averageMysteriesCount = levelsCount / complexitiesCount;
+        Random random = new Random();
+        ArrayList<Mystery> mysteriesSet = new ArrayList<>();
+        for(int i = complexitiesCount - 1; i >= 0; --i)
+        {
+            int lowerBound = (i - 1 < 0)? 0 : bounds[i - 1];
+            for(int j = 0; j < averageMysteriesCount; ++j)
+            {
+                if(bounds[i] - lowerBound <= 0)
+                    break;
+                int index = random.nextInt(lowerBound, bounds[i]);
+                --bounds[i];
+                mysteriesSet.add(allMysteries.get(index));
+                allMysteries.set(index, null);
+                Collections.swap(allMysteries, index, bounds[i]);
+            }
+        }
+
+        if(mysteriesSet.size() != levelsCount)
+        {
+            int bound = levelsCount - mysteriesSet.size();
+            for(int i = 0; i < bound; ++i)
+            {
+                if(allMysteries.get(i) != null)
+                    mysteriesSet.add(allMysteries.get(i));
+            }
+        }
+
+        mysteriesSet.sort((m1, m2) -> m1.getComplexity() - m2.getComplexity());
+        return mysteriesSet;
     }
 
 }

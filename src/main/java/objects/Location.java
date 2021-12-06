@@ -21,10 +21,4 @@ public class Location
         return description;
     }
 
-    @Override
-    public String toString()
-    {
-        return name + "\n" + description;
-    }
-
 }
