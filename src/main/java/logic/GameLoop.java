@@ -20,7 +20,7 @@ public class GameLoop
     private static ArrayList<NPC> NPCs;
     private static int currentTurn = 0;
 
-    private static final int levelsCount = 5;
+    private static final int levelsCount = 10;
     private static final int complexitiesCount = 5;
 
     private static final int baseAddedScore = 10;
@@ -31,16 +31,36 @@ public class GameLoop
 
     public static void main(String[] args)
     {
+        Log.startAutoLogger();
+
         View.printlnPhrase(Phrases.getWelcomePhrase());
-        View.printlnPhrase(Phrases.getTellingFacePhrase("System"));
 
-        if(getUserYNAnswer(Phrases.getLoadSuggestPhrase()))
-            loadGame();
-        else
-            loadNewGame();
+        do
+        {
+            View.printlnPhrase(Phrases.getEmptyPhrase());
+            View.printlnPhrase(Phrases.getTellingFacePhrase("System"));
 
-        gameCycle();
+            if(getUserYNAnswer(Phrases.getLoadSuggestPhrase()))
+                loadGame();
+            else
+                loadNewGame();
 
+            gameCycle();
+        }
+        while(getUserYNAnswer(Phrases.getContinueGamePhrase()));
+
+        try
+        {
+            Log.stopAutoLogger();
+        }
+        catch(InterruptedException e)
+        {
+            Log.writeInfo("[GameLoop][getUserYNAnswer]: exception: " + e.getMessage());
+        }
+
+        View.printlnPhrase(Phrases.getEmptyPhrase());
+        View.printlnPhrase(Phrases.getTellingFacePhrase("Logger"));
+        Log.printHistory();
     }
 
     private static boolean getUserYNAnswer(String phrase)
@@ -50,7 +70,9 @@ public class GameLoop
         {
             View.printPhrase(phrase);
             input = Input.getInput();
+            Log.writeInfo("[GameLoop][getUserYNAnswer]: user has put " + input);
         }
+
         return input.equals("Y");
     }
 
@@ -61,6 +83,8 @@ public class GameLoop
         {
             View.printPhrase(phrase);
             input = Input.getInput();
+            Log.writeInfo("[GameLoop][getUserVariant]: user has put " + input);
+
             if(input.equals("exit"))
                 return -1;
             if(input.matches("[0-9]+") && input.length() <= ((Mystery.getVariantsCount() - 1) / 10 + 1))
@@ -75,11 +99,15 @@ public class GameLoop
     private static void loadNewGame()
     {
         View.printPhrase(Phrases.getPutNamePhrase());
+
         player = new Player(Input.getInput(), 100, 0);
         View.printlnPhrase(Phrases.getHelloPhrase(player.getName()));
         locations = LocationsReader.getLocations(levelsCount);
         ArrayList<Mystery> mysteries = MysteriesReader.getMysteries(levelsCount, complexitiesCount);
         NPCs = generateNPCs(mysteries);
+        currentTurn = 0;
+
+        Log.writeInfo("[GameLoop][loadNewGame]: new game has started");
     }
 
     private static void loadGame()
@@ -89,6 +117,7 @@ public class GameLoop
         {
             loadedSL = SaveLoader.load(savePath);
             View.printlnPhrase(Phrases.getLoadSuccessfulPhrase());
+            Log.writeInfo("[GameLoop][loadGame]: the game has been loaded ");
 
             player = loadedSL.getPlayer();
             locations = loadedSL.getLocations();
@@ -99,6 +128,7 @@ public class GameLoop
         {
             View.printlnPhrase(Phrases.getLoadFaultPhrase());
             loadedSL = null;
+            Log.writeInfo("[GameLoop][loadGame]: exception: " + e.getMessage());
         }
         View.printlnPhrase(Phrases.getEmptyPhrase());
     }
@@ -110,10 +140,12 @@ public class GameLoop
         {
             sl.save(savePath);
             View.printlnPhrase(Phrases.getSaveSuccessfulPhrase());
+            Log.writeInfo("[GameLoop][loadGame]: the game has been saved ");
         }
         catch(IOException e)
         {
             View.printlnPhrase(Phrases.getSaveFaultPhrase());
+            Log.writeInfo("[GameLoop][loadGame]: exception: " + e.getMessage());
         }
     }
 
@@ -138,6 +170,7 @@ public class GameLoop
             View.printlnPhrase(Phrases.getTellingFacePhrase("Storyteller"));
             View.printlnPhrase(Phrases.getAnswerPhrase());
 
+            View.printlnPhrase(Phrases.getEmptyPhrase());
             View.printlnPhrase(Phrases.getTellingFacePhrase(player.getName()));
             int answer = getUserVariant(Phrases.getAskVariantPhrase());
             if(answer == -1)
@@ -187,9 +220,12 @@ public class GameLoop
                     View.printlnPhrase(Phrases.getHPDecreasePhrase(removedHP, player.getHitPoints()));
                 }
             }
+            Log.writeInfo("[GameLoop][gameCycle]: " + i + " iteration has ended");
         }
+        View.printlnPhrase(Phrases.getEmptyPhrase());
         View.printlnPhrase(Phrases.getTellingFacePhrase("System"));
         View.printlnPhrase(Phrases.getEndGameStatsPhrase(player.getScore()));
+        Log.writeInfo("[GameLoop][gameCycle]: gameCycle has ended");
     }
 
     public static Player getPlayer()

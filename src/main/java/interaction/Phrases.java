@@ -21,6 +21,11 @@ public class Phrases
         return ANSI_GREEN + "Welcome to the LAB-6!" + ANSI_RESET;
     }
 
+    public static String getContinueGamePhrase()
+    {
+        return "Do you want to continue?[Y/N]: ";
+    }
+
     public static String getTellingFacePhrase(String face)
     {
         return ANSI_YELLOW + "<" + face + ">" + ANSI_RESET;

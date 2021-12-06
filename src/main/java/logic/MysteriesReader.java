@@ -41,11 +41,13 @@ public class MysteriesReader
 
                 bufferedReader.readLine();
             }
+            Log.writeInfo("[MysteriesReader][getMysteries]: mysteries have been loaded");
         }
         catch(IOException e)
         {
             System.out.println(e.getMessage());
             allMysteries = null;
+            Log.writeInfo("[MysteriesReader][getMysteries]: exception: " + e.getMessage());
         }
 
         return distributeMysteries(allMysteries, levelsCount, complexitiesCount);

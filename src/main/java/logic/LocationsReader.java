@@ -37,13 +37,14 @@ public class LocationsReader
                 locations.add(new Location(name, description));
                 s = bufferedReader.readLine();
             }
+            Log.writeInfo("[LocationReader][getLocations]: locations have been loaded");
         }
         catch(IOException e)
         {
             System.out.println(e.getMessage());
             locations = null;
+            Log.writeInfo("[LocationReader][getLocations]: exception: " + e.getMessage());
         }
-
         return distributeLocations(locations, levelsCount);
     }
 

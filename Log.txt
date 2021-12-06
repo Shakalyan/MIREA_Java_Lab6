@@ -1,0 +1,40 @@
+[GameLoop][getUserYNAnswer]: user has put Y
+[GameLoop][loadGame]: the game has been loaded 
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 2 iteration has ended
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 3 iteration has ended
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 4 iteration has ended
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: gameCycle has ended
+[GameLoop][getUserYNAnswer]: user has put Y
+[GameLoop][getUserYNAnswer]: user has put Y
+[GameLoop][loadGame]: the game has been loaded 
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 2 iteration has ended
+[GameLoop][getUserVariant]: user has put 3
+[GameLoop][gameCycle]: 3 iteration has ended
+[GameLoop][getUserVariant]: user has put 2
+[GameLoop][gameCycle]: 4 iteration has ended
+[GameLoop][getUserVariant]: user has put 0
+[GameLoop][gameCycle]: 5 iteration has ended
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 6 iteration has ended
+[GameLoop][getUserVariant]: user has put 0
+[GameLoop][gameCycle]: 7 iteration has ended
+[GameLoop][getUserVariant]: user has put 0
+[GameLoop][gameCycle]: 8 iteration has ended
+[GameLoop][getUserVariant]: user has put 1
+[GameLoop][gameCycle]: 9 iteration has ended
+[GameLoop][gameCycle]: gameCycle has ended
+[GameLoop][getUserYNAnswer]: user has put Y
+[GameLoop][getUserYNAnswer]: user has put N
+[LocationReader][getLocations]: locations have been loaded
+[MysteriesReader][getMysteries]: mysteries have been loaded
+[GameLoop][loadNewGame]: new game has started
+[GameLoop][getUserVariant]: user has put exit
+[GameLoop][getUserYNAnswer]: user has put Y
+[GameLoop][loadGame]: the game has been saved 
+[GameLoop][getUserYNAnswer]: user has put N
+[AutoSaveLogWorker][run]: exception: sleep interrupted
